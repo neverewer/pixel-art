@@ -19,9 +19,18 @@ class BoardAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       actions: [
-        IconButton(onPressed: () {}, icon: const Icon(Icons.remove)),
-        IconButton(onPressed: () {}, icon: const Icon(Icons.equalizer)),
-        IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.remove),
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.equalizer),
+        ),
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.add),
+        ),
       ],
     );
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pixel_art/pixel_board_page.dart';
+import 'package:pixel_art/src/features/pixel_board/pixel_art_page.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -7,7 +7,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: PixelBoardPage(),
+      home: PixelArtPage(),
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class PixelArtViewModel extends ChangeNotifier {
@@ -33,28 +35,12 @@ class PixelArtViewModel extends ChangeNotifier {
       return;
     }
 
-    if (_pixels.isEmpty) {
-      _boardWidth = newWidth;
-    } else {
-      bool isIncrease = newWidth > _boardWidth;
-
-      if (isIncrease) {
-        if (newWidth - _boardWidth == 1) {
-          _pixels.add(List.generate(_boardHeight, (_) => 0));
-        } else {
-          _pixels.addAll(List.generate(newWidth - _boardWidth, (_) => List.generate(_boardHeight, (_) => 0)));
-        }
-      } else {
-        if (_boardWidth - newWidth == 1) {
-          _pixels.removeLast();
-        } else {
-          _pixels.removeRange(newWidth, _boardWidth);
-        }
-      }
-      _boardWidth = newWidth;
-      print('boardWidth:   $_boardWidth');
-      print('board.length :  ${_pixels.length}');
+    if (_pixels.isNotEmpty) {
+      _pixels = List.generate(newWidth, (index) => List.generate(_boardHeight, (index) => 0))
+        ..setRange(0, min(newWidth, _boardWidth), _pixels);
     }
+
+    _boardWidth = newWidth;
     notifyListeners();
   }
 
@@ -63,30 +49,13 @@ class PixelArtViewModel extends ChangeNotifier {
       return;
     }
 
-    if (_pixels.isEmpty) {
-      _boardHeight = newHeight;
-    } else {
-      bool isIncrease = newHeight > _boardHeight;
-
+    if (_pixels.isNotEmpty) {
       for (int i = 0; i < _boardWidth; i++) {
-        if (isIncrease) {
-          if (newHeight - _boardHeight == 1) {
-            _pixels[i].add(0);
-          } else {
-            _pixels[i].addAll(List.generate(newHeight - _boardHeight, (_) => 0));
-          }
-        } else {
-          if (_boardHeight - newHeight == 1) {
-            _pixels[i].removeLast();
-          } else {
-            _pixels[i].removeRange(newHeight, _boardHeight);
-          }
-        }
+        _pixels[i] = List.generate(newHeight, (index) => 0)..setRange(0, min(newHeight, _boardHeight), _pixels[i]);
       }
-      _boardHeight = newHeight;
-      print('boardHeight:   $_boardHeight');
-      print('board[0].length :  ${_pixels[0].length}');
     }
+
+    _boardHeight = newHeight;
     notifyListeners();
   }
 

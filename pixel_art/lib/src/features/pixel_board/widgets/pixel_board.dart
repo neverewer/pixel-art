@@ -42,6 +42,15 @@ class PixelBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final boardSize = Size(width * cellSize, height * cellSize);
+    final size = MediaQuery.of(context).size;
+
+    double newCellSize = 0;
+
+    if (size.width > boardSize.width) {
+      newCellSize = size.width / width;
+    } else if (size.height > boardSize.height) {
+      newCellSize = size.height / height;
+    }
 
     return GestureDetector(
       onPanStart: (details) {

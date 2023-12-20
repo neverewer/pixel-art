@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:pixel_art/src/features/pixel_board/models/cell.dart';
 
 class PixelArtViewModel extends ChangeNotifier {
-  Color _painColor = Colors.black;
-
-  Color get painColor => _painColor;
-
   int _boardWidth = 5;
 
   int get boardWidth => _boardWidth;
 
-  int _boardHeight = 2;
+  int _boardHeight = 5;
 
   int get boardHeight => _boardHeight;
 
@@ -18,36 +13,47 @@ class PixelArtViewModel extends ChangeNotifier {
 
   double get cellSize => _cellSize;
 
-  List<List<Cell>> _board = List.empty();
+  List<List<int>> _pixels = List.empty();
 
-  List<List<Cell>> get board => _board;
+  List<List<int>> get pixels => _pixels;
+
+  final List<int> _colors = [
+    const Color.fromARGB(255, 255, 255, 255).value,
+    const Color.fromARGB(255, 0, 0, 0).value,
+  ];
+
+  List<int> get colors => _colors;
+
+  int _selectedColor = 1;
+
+  int get selectedColor => _selectedColor;
 
   void changeWidth(int newWidth) {
     if (newWidth == _boardWidth) {
       return;
     }
 
-    if (board.isEmpty) {
+    if (_pixels.isEmpty) {
       _boardWidth = newWidth;
     } else {
       bool isIncrease = newWidth > _boardWidth;
 
       if (isIncrease) {
         if (newWidth - _boardWidth == 1) {
-          _board.add(List.generate(_boardHeight, (_) => Cell.empty()));
+          _pixels.add(List.generate(_boardHeight, (_) => 0));
         } else {
-          _board.addAll(List.generate(newWidth - _boardWidth, (_) => List.generate(_boardHeight, (_) => Cell.empty())));
+          _pixels.addAll(List.generate(newWidth - _boardWidth, (_) => List.generate(_boardHeight, (_) => 0)));
         }
       } else {
         if (_boardWidth - newWidth == 1) {
-          _board.removeLast();
+          _pixels.removeLast();
         } else {
-          _board.removeRange(newWidth, _boardWidth);
+          _pixels.removeRange(newWidth, _boardWidth);
         }
       }
       _boardWidth = newWidth;
       print('boardWidth:   $_boardWidth');
-      print('board.length :  ${_board.length}');
+      print('board.length :  ${_pixels.length}');
     }
     notifyListeners();
   }
@@ -57,7 +63,7 @@ class PixelArtViewModel extends ChangeNotifier {
       return;
     }
 
-    if (board.isEmpty) {
+    if (_pixels.isEmpty) {
       _boardHeight = newHeight;
     } else {
       bool isIncrease = newHeight > _boardHeight;
@@ -65,32 +71,32 @@ class PixelArtViewModel extends ChangeNotifier {
       for (int i = 0; i < _boardWidth; i++) {
         if (isIncrease) {
           if (newHeight - _boardHeight == 1) {
-            _board[i].add(Cell.empty());
+            _pixels[i].add(0);
           } else {
-            _board[i].addAll(List.generate(newHeight - _boardHeight, (_) => Cell.empty()));
+            _pixels[i].addAll(List.generate(newHeight - _boardHeight, (_) => 0));
           }
         } else {
           if (_boardHeight - newHeight == 1) {
-            _board[i].removeLast();
+            _pixels[i].removeLast();
           } else {
-            _board[i].removeRange(newHeight, _boardHeight);
+            _pixels[i].removeRange(newHeight, _boardHeight);
           }
         }
       }
       _boardHeight = newHeight;
       print('boardHeight:   $_boardHeight');
-      print('board[0].length :  ${_board[0].length}');
+      print('board[0].length :  ${_pixels[0].length}');
     }
     notifyListeners();
   }
 
   void start() {
-    _board = List.generate(_boardWidth, (_) => List<Cell>.generate(_boardHeight, (_) => Cell.empty()), growable: true);
+    _pixels = List.generate(_boardWidth, (_) => List.generate(_boardHeight, (_) => 0), growable: true);
     notifyListeners();
   }
 
   void selectCell(int i, int j) {
-    if (board.isEmpty) {
+    if (_pixels.isEmpty) {
       return;
     }
 
@@ -98,11 +104,11 @@ class PixelArtViewModel extends ChangeNotifier {
       return;
     }
 
-    if (board[i][j].value == 1) {
+    if (_pixels[i][j] != 0) {
       return;
     }
 
-    board[i][j].select(_painColor);
+    _pixels[i][j] = _selectedColor;
     notifyListeners();
   }
 
@@ -115,4 +121,8 @@ class PixelArtViewModel extends ChangeNotifier {
     _cellSize--;
     notifyListeners();
   }
+
+  int getPixelColor(int colorIndex) => _colors[colorIndex];
+
+  void addColor(int colorValue) => _colors.add(colorValue);
 }

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 class PixelBoard extends StatelessWidget {
   final int width;
   final int height;
-  final List<List<Cell>> board;
+  final List<List<int>> pixels;
   final double cellSize;
 
   const PixelBoard({
@@ -14,7 +14,7 @@ class PixelBoard extends StatelessWidget {
     required this.width,
     required this.height,
     required this.cellSize,
-    required this.board,
+    required this.pixels,
   });
 
 // class _PixelBoardState extends State<PixelBoard> {
@@ -63,9 +63,9 @@ class PixelBoard extends StatelessWidget {
                   height: cellSize,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                      color: board[i][j].color,
+                      color: Color(context.read<PixelArtViewModel>().getPixelColor(pixels[i][j])),
                       border: Border.all(
-                          color: board[i][j].value == 1 ? Colors.white : Colors.black,
+                          color: pixels[i][j] == 0 ? Colors.black : Colors.white,
                           width: 1,
                           strokeAlign: BorderSide.strokeAlignInside),
                     ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pixel_art/src/features/pixel_board/models/cell.dart';
 import 'package:pixel_art/src/features/pixel_board/pixel_art_view_model.dart';
 import 'package:pixel_art/src/features/pixel_board/widgets/board_app_bar.dart';
 import 'package:pixel_art/src/features/pixel_board/widgets/pixel_board.dart';
@@ -13,7 +12,7 @@ class PixelArtView extends StatelessWidget {
     final int boardWidth = context.watch<PixelArtViewModel>().boardWidth;
     final int boardHeight = context.watch<PixelArtViewModel>().boardHeight;
     final double cellSize = context.watch<PixelArtViewModel>().cellSize;
-    final List<List<Cell>> board = context.watch<PixelArtViewModel>().board;
+    final List<List<int>> pixels = context.watch<PixelArtViewModel>().pixels;
 
     return Scaffold(
       appBar: const BoardAppBar(),
@@ -25,7 +24,7 @@ class PixelArtView extends StatelessWidget {
             children: [
               Positioned.fill(
                 child: Center(
-                  child: board.isEmpty
+                  child: pixels.isEmpty
                       ? ElevatedButton(
                           onPressed: () => context.read<PixelArtViewModel>().start(),
                           child: const Text('Start'),
@@ -34,7 +33,7 @@ class PixelArtView extends StatelessWidget {
                           width: boardWidth,
                           height: boardHeight,
                           cellSize: cellSize,
-                          board: board,
+                          pixels: pixels,
                         ),
                 ),
               ),

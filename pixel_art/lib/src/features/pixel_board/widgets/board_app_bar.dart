@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pixel_art/src/features/pixel_board/pixel_art_view_model.dart';
+import 'package:provider/provider.dart';
 
 class BoardAppBar extends StatelessWidget implements PreferredSizeWidget {
   const BoardAppBar({super.key});
@@ -20,7 +22,7 @@ class BoardAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () => context.read<PixelArtViewModel>().decreaseCellSize(),
           icon: const Icon(Icons.remove),
         ),
         IconButton(
@@ -28,7 +30,7 @@ class BoardAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: const Icon(Icons.equalizer),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () => context.read<PixelArtViewModel>().increaseCellSize(),
           icon: const Icon(Icons.add),
         ),
       ],
@@ -36,6 +38,5 @@ class BoardAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  // TODO: implement preferredSize
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

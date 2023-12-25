@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:pixel_art/src/features/pixel_board/models/tools.dart';
 
 class PixelArtViewModel extends ChangeNotifier {
   int _boardWidth = 5;
@@ -18,6 +19,14 @@ class PixelArtViewModel extends ChangeNotifier {
   List<List<int>> _pixels = List.empty();
 
   List<List<int>> get pixels => _pixels;
+
+  Tools _selectedTool = Tools.pen;
+
+  Tools get selectedTool => _selectedTool;
+
+  Offset _scrollOffset = Offset.zero;
+
+  Offset get scrollOffset => _scrollOffset;
 
   final List<int> _colors = [
     const Color.fromARGB(255, 255, 255, 255).value,
@@ -73,13 +82,20 @@ class PixelArtViewModel extends ChangeNotifier {
       return;
     }
 
-    if (_pixels[i][j] != 0) {
-      return;
-    }
-
     _pixels[i][j] = _selectedColor;
     notifyListeners();
   }
+
+  void fillPixels() {
+    if (_pixels.isEmpty) {
+      return;
+    }
+
+    _pixels = List.generate(_boardWidth, (_) => List.generate(_boardHeight, (_) => _selectedColor), growable: true);
+    notifyListeners();
+  }
+
+  List<int> getColors() => _colors;
 
   void increaseCellSize() {
     _cellSize++;
@@ -93,5 +109,23 @@ class PixelArtViewModel extends ChangeNotifier {
 
   int getPixelColor(int colorIndex) => _colors[colorIndex];
 
-  void addColor(int colorValue) => _colors.add(colorValue);
+  void selectColor(int colorIndex) {
+    _selectedColor = colorIndex;
+    notifyListeners();
+  }
+
+  void addColor(int colorValue) {
+    _colors.add(colorValue);
+    notifyListeners();
+  }
+
+  void changeTool(Tools tool) {
+    _selectedTool = tool;
+    notifyListeners();
+  }
+
+  void changeScrollOffset(Offset offset) {
+    _scrollOffset += offset;
+    notifyListeners();
+  }
 }

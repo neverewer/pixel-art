@@ -16,6 +16,7 @@ class PixelArtView extends StatelessWidget {
     final List<List<int>> pixels = context.watch<PixelArtViewModel>().pixels;
     final List<int> colors = context.watch<PixelArtViewModel>().colors;
     final double cellSize = context.watch<PixelArtViewModel>().cellSize;
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: const BoardAppBar(),
@@ -33,13 +34,12 @@ class PixelArtView extends StatelessWidget {
                       ),
                     ))
                   : Positioned.fill(
-                      child: Center(
-                        child: PixelBoard(
-                          width: boardWidth,
-                          height: boardHeight,
-                          cellSize: cellSize,
-                          pixels: pixels,
-                        ),
+                      child: PixelBoard(
+                        width: boardWidth,
+                        height: boardHeight,
+                        cellSize: cellSize,
+                        pixels: pixels,
+                        size: size,
                       ),
                     ),
               Positioned(

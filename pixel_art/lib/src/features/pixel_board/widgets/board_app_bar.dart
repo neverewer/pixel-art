@@ -26,10 +26,6 @@ class BoardAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: const Icon(Icons.remove),
         ),
         IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.equalizer),
-        ),
-        IconButton(
           onPressed: () => context.read<PixelArtViewModel>().increaseCellSize(),
           icon: const Icon(Icons.add),
         ),

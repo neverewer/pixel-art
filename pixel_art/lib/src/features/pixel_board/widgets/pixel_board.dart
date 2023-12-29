@@ -58,39 +58,47 @@ class _PixelBoardState extends State<PixelBoard> {
     context.read<PixelArtViewModel>().fillPixels();
   }
 
+  void fillOrPaint(Offset pointerPosition, Tools tool) {
+    if (tool == Tools.pan) {
+      return;
+    } else if (tool == Tools.pen) {
+      paintCell(pointerPosition);
+    } else {
+      fillCells(context, tool);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final selectedTool = context.watch<PixelArtViewModel>().selectedTool;
     final colors = context.read<PixelArtViewModel>().getColors();
+    final physics = selectedTool == Tools.pan ? const ClampingScrollPhysics() : const NeverScrollableScrollPhysics();
 
     return Listener(
-      onPointerDown: (event) => paintCell(event.position),
-      onPointerMove: (event) => paintCell(event.position),
-      child: IgnorePointer(
-        ignoring: selectedTool == Tools.pan ? false : true,
-        child: TwoDimensionalGridView(
-          key: _gridKey,
-          itemSize: widget.cellSize,
-          horizontalDetails: const ScrollableDetails.horizontal(),
-          verticalDetails: const ScrollableDetails.vertical(),
-          delegate: TwoDimensionalChildBuilderDelegate(
-            maxXIndex: widget.pixels.length - 1,
-            maxYIndex: widget.pixels.first.length - 1,
-            builder: (BuildContext context, ChildVicinity vicinity) {
-              final int value = widget.pixels.elementAt(vicinity.xIndex).elementAt(vicinity.yIndex);
-              final backgroundCellColor = Color(colors[value]);
-              return PixelRenderObject(
-                xIndex: vicinity.xIndex,
-                yIndex: vicinity.yIndex,
-                child: Pixel(
-                  size: widget.cellSize,
-                  color: backgroundCellColor,
-                  borderColor: backgroundCellColor.invertColor(),
-                  borderWidth: widget.cellSize * 0.035,
-                ),
-              );
-            },
-          ),
+      onPointerDown: (event) => fillOrPaint(event.position, selectedTool),
+      onPointerMove: (event) => selectedTool == Tools.pen ? paintCell(event.position) : null,
+      child: TwoDimensionalGridView(
+        key: _gridKey,
+        itemSize: widget.cellSize,
+        horizontalDetails: ScrollableDetails.horizontal(physics: physics),
+        verticalDetails: ScrollableDetails.vertical(physics: physics),
+        delegate: TwoDimensionalChildBuilderDelegate(
+          maxXIndex: widget.pixels.length - 1,
+          maxYIndex: widget.pixels.first.length - 1,
+          builder: (BuildContext context, ChildVicinity vicinity) {
+            final int value = widget.pixels.elementAt(vicinity.xIndex).elementAt(vicinity.yIndex);
+            final backgroundCellColor = Color(colors[value]);
+            return PixelRenderObject(
+              xIndex: vicinity.xIndex,
+              yIndex: vicinity.yIndex,
+              child: Pixel(
+                size: widget.cellSize,
+                color: backgroundCellColor,
+                borderColor: backgroundCellColor.invertColor(),
+                borderWidth: widget.cellSize * 0.035,
+              ),
+            );
+          },
         ),
       ),
     );

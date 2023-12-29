@@ -20,7 +20,7 @@ class PixelArtViewModel extends ChangeNotifier {
 
   List<List<int>> get pixels => _pixels;
 
-  Tools _selectedTool = Tools.pen;
+  Tools _selectedTool = Tools.pan;
 
   Tools get selectedTool => _selectedTool;
 
@@ -119,13 +119,13 @@ class PixelArtViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeTool(Tools tool) {
-    _selectedTool = tool;
+  void deleteColor(int index) {
+    _colors.removeAt(index);
     notifyListeners();
   }
 
-  void changeScrollOffset(Offset offset) {
-    _scrollOffset += offset;
+  void changeTool(Tools tool) {
+    _selectedTool = tool;
     notifyListeners();
   }
 }

@@ -77,17 +77,39 @@ class PixelArtView extends StatelessWidget {
                 child: ToolsBar(),
               ),
               Positioned(
-                top: 10,
+                top: 5,
+                right: 5,
+                child: SizedBox(
+                  width: 110,
+                  height: 40,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      shape: const LinearBorder(),
+                    ),
+                    onPressed: () {},
+                    child: const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 50,
                 bottom: 10,
                 right: 5,
                 child: SizedBox(
-                  width: 65,
-                  child: ListView.builder(
+                  width: 110,
+                  child: ListView.separated(
                     itemCount: colors.length,
-                    itemExtent: 35,
                     itemBuilder: (context, index) => ColorsListItem(
                       onTap: () => context.read<PixelArtViewModel>().selectColor(index),
+                      onDelete: () => context.read<PixelArtViewModel>().deleteColor(index),
                       colorValue: colors[index],
+                    ),
+                    separatorBuilder: (context, index) => const SizedBox(
+                      height: 5,
                     ),
                   ),
                 ),

@@ -70,6 +70,7 @@ class _PixelBoardState extends State<PixelBoard> {
         ignoring: selectedTool == Tools.pan ? false : true,
         child: TwoDimensionalGridView(
           key: _gridKey,
+          itemSize: widget.cellSize,
           horizontalDetails: const ScrollableDetails.horizontal(),
           verticalDetails: const ScrollableDetails.vertical(),
           delegate: TwoDimensionalChildBuilderDelegate(

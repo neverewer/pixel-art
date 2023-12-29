@@ -14,11 +14,14 @@ class TwoDimensionalGridView extends TwoDimensionalScrollView {
     super.horizontalDetails,
     required TwoDimensionalChildBuilderDelegate delegate,
     super.cacheExtent,
-    super.diagonalDragBehavior = DiagonalDragBehavior.none,
+    super.diagonalDragBehavior = DiagonalDragBehavior.free,
     super.dragStartBehavior = DragStartBehavior.start,
     super.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
     super.clipBehavior = Clip.hardEdge,
+    required this.itemSize,
   }) : super(delegate: delegate);
+
+  final double itemSize;
 
   @override
   Widget buildViewport(
@@ -35,6 +38,7 @@ class TwoDimensionalGridView extends TwoDimensionalScrollView {
       delegate: delegate as TwoDimensionalChildBuilderDelegate,
       cacheExtent: cacheExtent,
       clipBehavior: clipBehavior,
+      itemSize: itemSize,
     );
   }
 }
@@ -48,9 +52,12 @@ class TwoDimensionalGridViewport extends TwoDimensionalViewport {
     required super.horizontalAxisDirection,
     required TwoDimensionalChildBuilderDelegate super.delegate,
     required super.mainAxis,
+    required this.itemSize,
     super.cacheExtent,
     super.clipBehavior = Clip.hardEdge,
   });
+
+  final double itemSize;
 
   @override
   RenderTwoDimensionalViewport createRenderObject(BuildContext context) {
@@ -64,6 +71,7 @@ class TwoDimensionalGridViewport extends TwoDimensionalViewport {
       childManager: context as TwoDimensionalChildManager,
       cacheExtent: cacheExtent,
       clipBehavior: clipBehavior,
+      itemSize: itemSize,
     );
   }
 
@@ -80,7 +88,8 @@ class TwoDimensionalGridViewport extends TwoDimensionalViewport {
       ..mainAxis = mainAxis
       ..delegate = delegate
       ..cacheExtent = cacheExtent
-      ..clipBehavior = clipBehavior;
+      ..clipBehavior = clipBehavior
+      ..itemSize = itemSize;
   }
 }
 
@@ -93,9 +102,12 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
     required TwoDimensionalChildBuilderDelegate delegate,
     required super.mainAxis,
     required super.childManager,
+    required this.itemSize,
     super.cacheExtent,
     super.clipBehavior = Clip.hardEdge,
   }) : super(delegate: delegate);
+
+  double itemSize;
 
   @override
   void layoutChildSequence() {
@@ -110,8 +122,8 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
     final int maxRowIndex = builderDelegate.maxYIndex!;
     final int maxColumnIndex = builderDelegate.maxXIndex!;
 
-    final fullItemsWidth = (maxColumnIndex + 1) * 30;
-    final fullItemsHeight = (maxRowIndex + 1) * 30;
+    final fullItemsWidth = (maxColumnIndex + 1) * itemSize;
+    final fullItemsHeight = (maxRowIndex + 1) * itemSize;
 
     if (fullItemsWidth < viewportDimension.width) {
       centerHorizontalOffset = viewportDimension.width / 2 - fullItemsWidth / 2;
@@ -121,20 +133,20 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
       centerVerticalOffset = viewportDimension.height / 2 - fullItemsHeight / 2;
     }
 
-    final int leadingColumn = math.max((horizontalPixels / 30).floor(), 0);
-    final int leadingRow = math.max((verticalPixels / 30).floor(), 0);
+    final int leadingColumn = math.max((horizontalPixels / itemSize).floor(), 0);
+    final int leadingRow = math.max((verticalPixels / itemSize).floor(), 0);
     final int trailingColumn = math.min(
-      ((horizontalPixels + viewportWidth) / 30).ceil(),
+      ((horizontalPixels + viewportWidth) / itemSize).ceil(),
       maxColumnIndex,
     );
     final int trailingRow = math.min(
-      ((verticalPixels + viewportHeight) / 30).ceil(),
+      ((verticalPixels + viewportHeight) / itemSize).ceil(),
       maxRowIndex,
     );
 
-    double xLayoutOffset = (leadingColumn * 30) - horizontalOffset.pixels + centerHorizontalOffset;
+    double xLayoutOffset = (leadingColumn * itemSize) - horizontalOffset.pixels + centerHorizontalOffset;
     for (int column = leadingColumn; column <= trailingColumn; column++) {
-      double yLayoutOffset = (leadingRow * 30) - verticalOffset.pixels + centerVerticalOffset;
+      double yLayoutOffset = (leadingRow * itemSize) - verticalOffset.pixels + centerVerticalOffset;
       for (int row = leadingRow; row <= trailingRow; row++) {
         final ChildVicinity vicinity = ChildVicinity(xIndex: column, yIndex: row);
         final RenderBox child = buildOrObtainChildFor(vicinity)!;
@@ -142,18 +154,18 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
         // Subclasses only need to set the normalized layout offset. The super
         // class adjusts for reversed axes.
         parentDataOf(child).layoutOffset = Offset(xLayoutOffset, yLayoutOffset);
-        yLayoutOffset += 30;
+        yLayoutOffset += itemSize;
       }
-      xLayoutOffset += 30;
+      xLayoutOffset += itemSize;
     }
 
     // Set the min and max scroll extents for each axis.
-    final double verticalExtent = 30 * (maxRowIndex + 1);
+    final double verticalExtent = itemSize * (maxRowIndex + 1);
     verticalOffset.applyContentDimensions(
       0.0,
       clampDouble(verticalExtent - viewportDimension.height, 0.0, double.infinity),
     );
-    final double horizontalExtent = 30 * (maxColumnIndex + 1);
+    final double horizontalExtent = itemSize * (maxColumnIndex + 1);
     horizontalOffset.applyContentDimensions(
       0.0,
       clampDouble(horizontalExtent - viewportDimension.width, 0.0, double.infinity),

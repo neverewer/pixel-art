@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:pixel_art/src/features/dialogs/custom_color_picker.dart';
 import 'package:pixel_art/src/features/pixel_board/pixel_art_view_model.dart';
 import 'package:pixel_art/src/features/pixel_board/widgets/board_app_bar.dart';
 import 'package:pixel_art/src/features/pixel_board/widgets/colors_list_item.dart';
@@ -87,7 +89,13 @@ class PixelArtView extends StatelessWidget {
                       backgroundColor: Colors.green,
                       shape: const LinearBorder(),
                     ),
-                    onPressed: () {},
+                    onPressed: () async {
+                      final vm = context.read<PixelArtViewModel>();
+                      final pickedColor = await showColorPicker(context: context, initialColor: Colors.black);
+                      if (pickedColor != null) {
+                        vm.addColor(pickedColor);
+                      }
+                    },
                     child: const Icon(
                       Icons.add,
                       color: Colors.white,

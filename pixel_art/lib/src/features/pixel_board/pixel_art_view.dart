@@ -35,8 +35,6 @@ class PixelArtView extends StatelessWidget {
                     ))
                   : Positioned.fill(
                       child: PixelBoard(
-                        width: boardWidth,
-                        height: boardHeight,
                         cellSize: cellSize,
                         pixels: pixels,
                         size: size,

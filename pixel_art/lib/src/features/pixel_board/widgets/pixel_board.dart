@@ -11,10 +11,12 @@ import 'package:provider/provider.dart';
 
 class PixelBoard extends StatefulWidget {
   final List<List<int>> pixels;
+  final List<int> colors;
 
   const PixelBoard({
     super.key,
     required this.pixels,
+    required this.colors,
   });
 
   @override
@@ -67,7 +69,6 @@ class _PixelBoardState extends State<PixelBoard> {
   @override
   Widget build(BuildContext context) {
     final selectedTool = context.watch<PixelArtViewModel>().selectedTool;
-    final colors = context.read<PixelArtViewModel>().getColors();
     final double cellSize = context.watch<PixelArtViewModel>().cellSize;
     final physics = selectedTool == Tools.pan ? const ClampingScrollPhysics() : const NeverScrollableScrollPhysics();
 
@@ -84,7 +85,7 @@ class _PixelBoardState extends State<PixelBoard> {
           maxYIndex: widget.pixels.first.length - 1,
           builder: (BuildContext context, ChildVicinity vicinity) {
             final int value = widget.pixels.elementAt(vicinity.xIndex).elementAt(vicinity.yIndex);
-            final backgroundCellColor = Color(colors[value]);
+            final backgroundCellColor = Color(widget.colors[value]);
             return PixelRenderObject(
               xIndex: vicinity.xIndex,
               yIndex: vicinity.yIndex,

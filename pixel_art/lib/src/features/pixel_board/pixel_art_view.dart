@@ -31,6 +31,7 @@ class PixelArtView extends StatelessWidget {
                     ? const Center(child: StartButton())
                     : PixelBoard(
                         pixels: pixels,
+                        colors: colors,
                       ),
               ),
               Positioned(

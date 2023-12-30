@@ -25,13 +25,13 @@ class PixelArtViewModel extends ChangeNotifier {
   Tools get selectedTool => _selectedTool;
 
   final List<int> _colors = [
-    const Color.fromARGB(255, 255, 255, 255).value,
     const Color.fromARGB(255, 0, 0, 0).value,
+    const Color.fromARGB(255, 255, 255, 255).value,
   ];
 
   List<int> get colors => _colors;
 
-  int _selectedColor = 1;
+  int _selectedColor = 0;
 
   int get selectedColor => _selectedColor;
 
@@ -41,7 +41,7 @@ class PixelArtViewModel extends ChangeNotifier {
     }
 
     if (_pixels.isNotEmpty) {
-      _pixels = List.generate(newWidth, (index) => List.generate(_boardHeight, (index) => 0))
+      _pixels = List.generate(newWidth, (index) => List.generate(_boardHeight, (index) => 1))
         ..setRange(0, min(newWidth, _boardWidth), _pixels);
     }
 
@@ -56,7 +56,7 @@ class PixelArtViewModel extends ChangeNotifier {
 
     if (_pixels.isNotEmpty) {
       for (int i = 0; i < _boardWidth; i++) {
-        _pixels[i] = List.generate(newHeight, (index) => 0)..setRange(0, min(newHeight, _boardHeight), _pixels[i]);
+        _pixels[i] = List.generate(newHeight, (index) => 1)..setRange(0, min(newHeight, _boardHeight), _pixels[i]);
       }
     }
 
@@ -65,7 +65,7 @@ class PixelArtViewModel extends ChangeNotifier {
   }
 
   void start() {
-    _pixels = List.generate(_boardWidth, (_) => List.generate(_boardHeight, (_) => 0), growable: true);
+    _pixels = List.generate(_boardWidth, (_) => List.generate(_boardHeight, (_) => 1), growable: true);
     notifyListeners();
   }
 
@@ -91,8 +91,6 @@ class PixelArtViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<int> getColors() => _colors;
-
   void increaseCellSize() {
     _cellSize++;
     notifyListeners();
@@ -102,8 +100,6 @@ class PixelArtViewModel extends ChangeNotifier {
     _cellSize--;
     notifyListeners();
   }
-
-  int getPixelColor(int colorIndex) => _colors[colorIndex];
 
   void selectColor(int colorIndex) {
     _selectedColor = colorIndex;
@@ -117,6 +113,9 @@ class PixelArtViewModel extends ChangeNotifier {
   }
 
   void deleteColor(int index) {
+    _pixels = _pixels.map((row) {
+      return row.map((element) => element == index ? 1 : element).toList();
+    }).toList();
     _colors.removeAt(index);
     notifyListeners();
   }

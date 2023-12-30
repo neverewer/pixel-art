@@ -9,15 +9,21 @@ class BoardAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leadingWidth: double.infinity,
-      leading: const Row(
+      leading: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(width: 5),
-          Text('New'),
-          SizedBox(width: 5),
-          Text('Import'),
-          SizedBox(width: 5),
-          Text('Export'),
+          BoardAppBarLeadingButton(
+            text: 'New',
+            onPressed: () {},
+          ),
+          BoardAppBarLeadingButton(
+            text: 'Import',
+            onPressed: () {},
+          ),
+          BoardAppBarLeadingButton(
+            text: 'Export',
+            onPressed: () {},
+          )
         ],
       ),
       actions: [
@@ -35,4 +41,33 @@ class BoardAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+}
+
+class BoardAppBarLeadingButton extends StatelessWidget {
+  final String text;
+  final Function()? onPressed;
+
+  const BoardAppBarLeadingButton({
+    super.key,
+    required this.text,
+    this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 50,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
+          foregroundColor: Colors.black,
+          backgroundColor: Colors.transparent,
+          shape: const LinearBorder(),
+          elevation: 0,
+        ),
+        child: Text(text),
+      ),
+    );
+  }
 }

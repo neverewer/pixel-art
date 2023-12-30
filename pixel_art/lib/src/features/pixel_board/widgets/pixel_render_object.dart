@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+//need to hit test on pointer move or down
 class PixelRenderObject extends SingleChildRenderObjectWidget {
   final int xIndex;
   final int yIndex;

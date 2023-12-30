@@ -116,6 +116,7 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
     final double viewportWidth = viewportDimension.width + cacheExtent;
     final double viewportHeight = viewportDimension.height + cacheExtent;
     final TwoDimensionalChildBuilderDelegate builderDelegate = delegate as TwoDimensionalChildBuilderDelegate;
+
     double centerHorizontalOffset = 0.0;
     double centerVerticalOffset = 0.0;
 
@@ -125,10 +126,11 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
     final fullItemsWidth = (maxColumnIndex + 1) * itemSize;
     final fullItemsHeight = (maxRowIndex + 1) * itemSize;
 
+    // Center the grid on the screen  on horizontal if the grid width is smaller than the screen width
     if (fullItemsWidth < viewportDimension.width) {
       centerHorizontalOffset = viewportDimension.width / 2 - fullItemsWidth / 2;
     }
-
+    // Center the grid on the screen  on vertical if the grid height is smaller than the screen height
     if (fullItemsHeight < viewportDimension.height) {
       centerVerticalOffset = viewportDimension.height / 2 - fullItemsHeight / 2;
     }

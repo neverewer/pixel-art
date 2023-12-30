@@ -24,10 +24,6 @@ class PixelArtViewModel extends ChangeNotifier {
 
   Tools get selectedTool => _selectedTool;
 
-  Offset _scrollOffset = Offset.zero;
-
-  Offset get scrollOffset => _scrollOffset;
-
   final List<int> _colors = [
     const Color.fromARGB(255, 255, 255, 255).value,
     const Color.fromARGB(255, 0, 0, 0).value,
@@ -116,6 +112,7 @@ class PixelArtViewModel extends ChangeNotifier {
 
   void addColor(int colorValue) {
     _colors.add(colorValue);
+    _selectedColor = _colors.length - 1;
     notifyListeners();
   }
 

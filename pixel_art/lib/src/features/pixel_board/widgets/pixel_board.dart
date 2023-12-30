@@ -11,14 +11,10 @@ import 'package:provider/provider.dart';
 
 class PixelBoard extends StatefulWidget {
   final List<List<int>> pixels;
-  final double cellSize;
-  final Size size;
 
   const PixelBoard({
     super.key,
-    required this.cellSize,
     required this.pixels,
-    required this.size,
   });
 
   @override
@@ -72,6 +68,7 @@ class _PixelBoardState extends State<PixelBoard> {
   Widget build(BuildContext context) {
     final selectedTool = context.watch<PixelArtViewModel>().selectedTool;
     final colors = context.read<PixelArtViewModel>().getColors();
+    final double cellSize = context.watch<PixelArtViewModel>().cellSize;
     final physics = selectedTool == Tools.pan ? const ClampingScrollPhysics() : const NeverScrollableScrollPhysics();
 
     return Listener(
@@ -79,7 +76,7 @@ class _PixelBoardState extends State<PixelBoard> {
       onPointerMove: (event) => selectedTool == Tools.pen ? paintCell(event.position) : null,
       child: TwoDimensionalGridView(
         key: _gridKey,
-        itemSize: widget.cellSize,
+        itemSize: cellSize,
         horizontalDetails: ScrollableDetails.horizontal(physics: physics),
         verticalDetails: ScrollableDetails.vertical(physics: physics),
         delegate: TwoDimensionalChildBuilderDelegate(
@@ -92,10 +89,10 @@ class _PixelBoardState extends State<PixelBoard> {
               xIndex: vicinity.xIndex,
               yIndex: vicinity.yIndex,
               child: Pixel(
-                size: widget.cellSize,
+                size: cellSize,
                 color: backgroundCellColor,
                 borderColor: backgroundCellColor.invertColor(),
-                borderWidth: widget.cellSize * 0.035,
+                borderWidth: cellSize * 0.035,
               ),
             );
           },

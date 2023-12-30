@@ -1,8 +1,8 @@
-class PixeLData {
+class PixelData {
   final List<List<int>> pixels;
   final List<int>? colors;
 
-  PixeLData({
+  PixelData({
     required this.pixels,
     this.colors,
   });

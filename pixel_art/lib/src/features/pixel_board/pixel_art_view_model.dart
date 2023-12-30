@@ -117,6 +117,7 @@ class PixelArtViewModel extends ChangeNotifier {
       return row.map((element) => element == index ? 1 : element).toList();
     }).toList();
     _colors.removeAt(index);
+    _selectedColor = 0;
     notifyListeners();
   }
 

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pixel_art/src/features/dialogs/selectable_text_dialog.dart';
+import 'package:pixel_art/src/features/dialogs/text_input_dialog.dart';
 import 'package:pixel_art/src/features/pixel_board/pixel_art_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -14,15 +16,23 @@ class BoardAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           BoardAppBarLeadingButton(
             text: 'New',
-            onPressed: () {},
+            onPressed: () => context.read<PixelArtViewModel>().newBoard(),
           ),
           BoardAppBarLeadingButton(
-            text: 'Import',
-            onPressed: () {},
-          ),
+              text: 'Import',
+              onPressed: () async {
+                var vm = context.read<PixelArtViewModel>();
+                final text = await showTextInputDialog(context: context);
+                if (text != null) {
+                  vm.import(text);
+                }
+              }),
           BoardAppBarLeadingButton(
             text: 'Export',
-            onPressed: () {},
+            onPressed: () {
+              var data = context.read<PixelArtViewModel>().export();
+              return showSelectableTextDialog(context: context, data: data);
+            },
           )
         ],
       ),

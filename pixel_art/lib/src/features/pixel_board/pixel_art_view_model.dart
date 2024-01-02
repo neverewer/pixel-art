@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:pixel_art/src/features/pixel_board/models/pixel_data.dart';
 import 'package:pixel_art/src/features/pixel_board/models/tools.dart';
 
 class PixelArtViewModel extends ChangeNotifier {
@@ -24,7 +25,7 @@ class PixelArtViewModel extends ChangeNotifier {
 
   Tools get selectedTool => _selectedTool;
 
-  final List<int> _colors = [
+  List<int> _colors = [
     const Color.fromARGB(255, 0, 0, 0).value,
     const Color.fromARGB(255, 255, 255, 255).value,
   ];
@@ -123,6 +124,30 @@ class PixelArtViewModel extends ChangeNotifier {
 
   void changeTool(Tools tool) {
     _selectedTool = tool;
+    notifyListeners();
+  }
+
+  String export() {
+    final PixelData data = PixelData(pixels: _pixels, colors: _colors);
+    return data.toRawJson();
+  }
+
+  void import(String json) {
+    if (json.isEmpty) {
+      return;
+    }
+    final PixelData data = PixelData.fromRawJson(json);
+    _pixels = data.pixels;
+    if (data.colors != null) {
+      _colors = data.colors!;
+    }
+    notifyListeners();
+  }
+
+  void newBoard() {
+    _pixels = List.empty();
+    _boardHeight = 5;
+    _boardWidth = 5;
     notifyListeners();
   }
 }

@@ -65,7 +65,6 @@ class _PixelBoardState extends State<PixelBoard> {
   Widget build(BuildContext context) {
     final selectedTool = context.watch<PixelArtViewModel>().selectedTool;
     final double cellSize = context.watch<PixelArtViewModel>().cellSize;
-    // final physics = selectedTool == Tools.pan ? const ClampingScrollPhysics() : const NeverScrollableScrollPhysics();
 
     return Listener(
       onPointerDown: (event) => fillOrPaint(event.position, selectedTool),

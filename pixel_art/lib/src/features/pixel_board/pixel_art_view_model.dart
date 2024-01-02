@@ -136,11 +136,14 @@ class PixelArtViewModel extends ChangeNotifier {
     if (json.isEmpty) {
       return;
     }
+
     final PixelData data = PixelData.fromRawJson(json);
     _pixels = data.pixels;
+
     if (data.colors != null) {
       _colors = data.colors!;
     }
+
     notifyListeners();
   }
 
